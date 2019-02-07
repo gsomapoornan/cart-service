@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.visualpath.cartservice.model.UserCart;
-import com.visualpath.cartservice.service.CartService;
+import com.visualpath.cartservice.services.CartService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
