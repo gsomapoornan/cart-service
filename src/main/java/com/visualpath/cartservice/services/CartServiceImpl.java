@@ -3,6 +3,7 @@ package com.visualpath.cartservice.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -22,9 +23,13 @@ import com.visualpath.cartservice.model.UserCart;
 import com.visualpath.cartservice.repository.OrderDetailsCRUDRepository;
 import com.visualpath.cartservice.repository.OrdersCRUDRepository;
 
+import ch.qos.logback.classic.Logger;
+
 @Service("cartService")
 public class CartServiceImpl implements CartService {
-
+	 
+	
+	
 	@Autowired
 	OrdersCRUDRepository ordersRepo;
 	@Autowired
@@ -57,13 +62,16 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	UserCart userCart;
 	
+	
+	RestTemplate restTemplate=new RestTemplate();
+	
 	@Override
 	public ResponseEntity < String > addToCart(long userId, long productId) {
 		
 	 ServiceInstance serviceInstance=this.discoveryClient.getInstances(prodConfig.getAppname()).get(0);
 	 String url="http://" + serviceInstance.getHost()+ ":" + serviceInstance.getPort() + "/" + prodConfig.getProdIdresource();
 		
-	 RestTemplate restTemplate = new RestTemplate();	 
+	 //RestTemplate restTemplate = new RestTemplate();	 
 	 Product prod = restTemplate.getForObject(url,Product.class,productId);
 	 
 	//find if this user already has an order in cart and append to same order
@@ -108,6 +116,7 @@ public class CartServiceImpl implements CartService {
 		
 		 /*RestTemplate restTemplate = new RestTemplate();
 		 User user = restTemplate.getForObject(userConfig.getUrl(),User.class,userId);
+		 
 		     */
 		User user =  userRemoteClassService.getUserByID(userId);
 		
@@ -136,7 +145,4 @@ public class CartServiceImpl implements CartService {
 		
 		return userCart;
 	}
-
-	
-
 }
